@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI學習助手</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <div id="app" style="display: none;">
+        <div class="status-bar">
+            <span>5G</span>
+            <span id="clock">12:00</span>
+            <span>100%</span>
+        </div>
+
+        <header class="app-header">
+            <h1 class="app-title">AI學習助手</h1>
+            <p>探索AI的奧秘，成為AI時代的領航者</p>
+        </header>
+
+        <!-- 首頁 -->
+        <div class="page active" id="homePage">
+            <div class="main-content">
+                <div class="card" id="dailyTask">
+                    <h2>每日任務</h2>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 60%"></div>
+                    </div>
+                    <p>今日進度：3/5 完成</p>
+                    <button class="action-button" onclick="startLesson()">繼續學習</button>
+                </div>
+
+                <div class="card" id="featuredContent">
+                    <h2>精選內容</h2>
+                    <div class="knowledge-card">
+                        <h3>什麼是生成式AI？</h3>
+                        <p>生成式AI是一種能夠創造新內容的人工智能技術...</p>
+                        <button class="action-button" onclick="showDetail('ai-basics')">了解更多</button>
+                    </div>
+                </div>
+
+                <div class="card" id="popularTools">
+                    <h2>熱門工具</h2>
+                    <div class="tool-card">
+                        <h3>ChatGPT</h3>
+                        <p>最受歡迎的AI對話助手</p>
+                        <button class="action-button" onclick="showDetail('chatgpt')">查看詳情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 學習頁面 -->
+        <div class="page" id="learningPage">
+            <div class="main-content">
+                <!-- 課程進度卡片 -->
+                <div class="card">
+                    <h2>學習進度</h2>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 30%"></div>
+                    </div>
+                    <p>已完成 3/10 章節</p>
+                </div>
+
+                <!-- 課程列表 -->
+                <div class="card" id="courseList">
+                    <h2>課程目錄</h2>
+                    
+                    <!-- 第一章 -->
+                    <div class="course-chapter">
+                        <div class="chapter-header" onclick="toggleChapter('chapter1')">
+                            <h3>第一章：AI基礎概念</h3>
+                            <span class="material-icons">expand_more</span>
+                        </div>
+                        <div class="chapter-content" id="chapter1">
+                            <div class="lesson-item completed">
+                                <span class="material-icons">check_circle</span>
+                                <span>1.1 什麼是人工智能</span>
+                            </div>
+                            <div class="lesson-item completed">
+                                <span class="material-icons">check_circle</span>
+                                <span>1.2 AI的發展歷史</span>
+                            </div>
+                            <div class="lesson-item current">
+                                <span class="material-icons">play_circle</span>
+                                <span>1.3 機器學習基礎</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第二章 -->
+                    <div class="course-chapter">
+                        <div class="chapter-header" onclick="toggleChapter('chapter2')">
+                            <h3>第二章：生成式AI應用</h3>
+                            <span class="material-icons">expand_more</span>
+                        </div>
+                        <div class="chapter-content" id="chapter2">
+                            <div class="lesson-item locked">
+                                <span class="material-icons">lock</span>
+                                <span>2.1 文本生成應用</span>
+                            </div>
+                            <div class="lesson-item locked">
+                                <span class="material-icons">lock</span>
+                                <span>2.2 圖像生成技術</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第三章 -->
+                    <div class="course-chapter">
+                        <div class="chapter-header" onclick="toggleChapter('chapter3')">
+                            <h3>第三章：AI工具實戰</h3>
+                            <span class="material-icons">expand_more</span>
+                        </div>
+                        <div class="chapter-content" id="chapter3">
+                            <div class="lesson-item locked">
+                                <span class="material-icons">lock</span>
+                                <span>3.1 ChatGPT使用技巧</span>
+                            </div>
+                            <div class="lesson-item locked">
+                                <span class="material-icons">lock</span>
+                                <span>3.2 Midjourney創作指南</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 推薦學習 -->
+                <div class="card">
+                    <h2>推薦學習</h2>
+                    <div class="recommended-course" onclick="startLesson('recommended1')">
+                        <div class="course-image" style="background-color: #6C63FF">
+                            <span class="material-icons">psychology</span>
+                        </div>
+                        <div class="course-info">
+                            <h3>AI思維培養</h3>
+                            <p>學習AI思維方式，提升解決問題能力</p>
+                            <div class="tags">
+                                <span class="tag">入門</span>
+                                <span class="tag">30分鐘</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成就頁面 -->
+        <div class="page" id="achievementsPage">
+            <!-- 成就頁面的內容將在後續添加 -->
+        </div>
+
+        <!-- 個人頁面 -->
+        <div class="page" id="profilePage">
+            <!-- 個人頁面的內容將在後續添加 -->
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-page="homePage">
+                <span class="material-icons">home</span>
+                <div>首頁</div>
+            </div>
+            <div class="nav-item" data-page="learningPage">
+                <span class="material-icons">school</span>
+                <div>學習</div>
+            </div>
+            <div class="nav-item" data-page="achievementsPage">
+                <span class="material-icons">emoji_events</span>
+                <div>成就</div>
+            </div>
+            <div class="nav-item" data-page="profilePage">
+                <span class="material-icons">person</span>
+                <div>我的</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
