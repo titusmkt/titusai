@@ -341,3 +341,22 @@ body {
 .login-container {
     animation: slideUp 0.5s ease-out;
 }
+/* 個人頁面樣式 */
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    font-size: 80px !important;
+    color: var(--primary-color);
+}
+
+.profile-info {
+    margin: 20px 0;
+}
+
+.profile-info p {
+    margin: 10px 0;
+    color: #666;
+}
