@@ -170,9 +170,23 @@
         </div>
 
         <!-- 個人頁面 -->
-        <div class="page" id="profilePage">
-            <!-- 個人頁面的內容將在後續添加 -->
+       <div class="page" id="profilePage">
+    <div class="main-content">
+        <div class="card">
+            <div class="profile-header">
+                <span class="material-icons profile-avatar">account_circle</span>
+                <h2 id="profileName">加載中...</h2>
+            </div>
+            <div class="profile-info">
+                <p>手機號碼：<span id="profilePhone">加載中...</span></p>
+                <p>註冊日期：<span id="profileRegDate">加載中...</span></p>
+                <p>學習等級：<span id="profileLevel">1</span></p>
+            </div>
+            <button class="action-button" onclick="handleLogout()">登出</button>
         </div>
+    </div>
+</div>
+
 
         <nav class="bottom-nav">
             <div class="nav-item active" data-page="homePage">
