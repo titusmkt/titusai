@@ -1,3 +1,72 @@
+// 檢查用戶是否已登入
+function checkLoginStatus() {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+        // 已登入，隱藏登入頁面，顯示主應用
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        // 載入用戶資料
+        loadUserData();
+        return true;
+    }
+    return false;
+}
+
+// 處理登入
+function handleLogin() {
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const userName = document.getElementById('userName').value;
+
+    if (!phoneNumber || !userName) {
+        alert('請填寫完整資料');
+        return;
+    }
+
+    if (phoneNumber.length !== 8 || !/^\d+$/.test(phoneNumber)) {
+        alert('請輸入有效的8位手機號碼');
+        return;
+    }
+
+    // 儲存用戶資訊
+    const userInfo = {
+        phoneNumber,
+        userName,
+        registrationDate: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+    };
+
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+    // 初始化用戶數據
+    if (!localStorage.getItem('aiLearningUserData')) {
+        const initialUserData = {
+            level: 1,
+            exp: 0,
+            completedLessons: [],
+            badges: [],
+            quizScores: {}
+        };
+        localStorage.setItem('aiLearningUserData', JSON.stringify(initialUserData));
+    }
+
+    // 隱藏登入頁面，顯示主應用
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadUserData();
+}
+
+// 修改原本的初始化函數
+document.addEventListener('DOMContentLoaded', function() {
+    // 檢查登入狀態
+    if (!checkLoginStatus()) {
+        // 未登入，顯示登入頁面
+        document.getElementById('app').style.display = 'none';
+    }
+    
+    // 初始化應用
+    initializeApp();
+});
+
 // 當文檔加載完成時執行
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化
