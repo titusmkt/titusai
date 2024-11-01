@@ -215,3 +215,33 @@ function handleError(error) {
 
 // 初始加載用戶數據
 loadUserData();
+
+// 處理登出
+function handleLogout() {
+    if (confirm('確定要登出嗎？')) {
+        // 只清除登入狀態，保留學習記錄
+        localStorage.removeItem('userInfo');
+        location.reload();
+    }
+}
+
+// 更新個人資料顯示
+function updateProfileInfo() {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo) {
+        document.getElementById('profileName').textContent = userInfo.userName;
+        document.getElementById('profilePhone').textContent = userInfo.phoneNumber;
+        document.getElementById('profileRegDate').textContent = 
+            new Date(userInfo.registrationDate).toLocaleDateString();
+    }
+}
+
+// 在原本的 loadUserData 函數中添加
+function loadUserData() {
+    const savedData = localStorage.getItem('aiLearningUserData');
+    if (savedData) {
+        userData = JSON.parse(savedData);
+        updateUI();
+        updateProfileInfo(); // 添加這行
+    }
+}
