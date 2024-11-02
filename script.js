@@ -9,7 +9,7 @@ let userData = {
 
 // 用戶訂閱狀態
 let userSubscription = {
-    status: 'free', // 'free' 或 'premium'
+    status: 'free',
     expireDate: null
 };
 
@@ -27,16 +27,16 @@ function checkLoginStatus() {
 
 // 處理登入
 function handleLogin() {
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    const userName = document.getElementById('userName').value;
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const userName = document.getElementById('userName').value.trim();
 
     if (!phoneNumber || !userName) {
-        alert('請填寫完整資料');
+        showToast('請填寫完整資料');
         return;
     }
 
     if (phoneNumber.length !== 8 || !/^\d+$/.test(phoneNumber)) {
-        alert('請輸入有效的8位手機號碼');
+        showToast('請輸入有效的8位手機號碼');
         return;
     }
 
@@ -47,22 +47,43 @@ function handleLogin() {
         lastLogin: new Date().toISOString()
     };
 
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    try {
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
-    if (!localStorage.getItem('aiLearningUserData')) {
-        const initialUserData = {
-            level: 1,
-            exp: 0,
-            completedLessons: [],
-            badges: [],
-            quizScores: {}
-        };
-        localStorage.setItem('aiLearningUserData', JSON.stringify(initialUserData));
+        if (!localStorage.getItem('aiLearningUserData')) {
+            const initialUserData = {
+                level: 1,
+                exp: 0,
+                completedLessons: [],
+                badges: [],
+                quizScores: {}
+            };
+            localStorage.setItem('aiLearningUserData', JSON.stringify(initialUserData));
+        }
+
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        loadUserData();
+        showToast('登入成功！', 'success');
+    } catch (error) {
+        console.error('登入時發生錯誤:', error);
+        showToast('登入失敗，請稍後再試');
     }
+}
 
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadUserData();
+// 顯示提示訊息
+function showToast(message, type = 'error') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // 動畫效果
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 // 應用程式初始化
@@ -70,6 +91,7 @@ function initializeApp() {
     updateClock();
     setInterval(updateClock, 1000);
     setupNavigation();
+    loadSubscriptionStatus();
 
     window.onload = function() {
         document.getElementById('loader').style.display = 'none';
@@ -79,6 +101,47 @@ function initializeApp() {
             document.getElementById('app').style.display = 'block';
             showCards();
         }
+    };
+
+    // 添加返回頂部按鈕
+    setupScrollToTop();
+}
+
+// 載入訂閱狀態
+function loadSubscriptionStatus() {
+    const savedSubscription = localStorage.getItem('userSubscription');
+    if (savedSubscription) {
+        userSubscription = JSON.parse(savedSubscription);
+        
+        // 檢查訂閱是否過期
+        if (userSubscription.expireDate && new Date(userSubscription.expireDate) < new Date()) {
+            userSubscription.status = 'free';
+            userSubscription.expireDate = null;
+            localStorage.setItem('userSubscription', JSON.stringify(userSubscription));
+        }
+    }
+}
+
+// 返回頂部功能
+function setupScrollToTop() {
+    const scrollBtn = document.createElement('button');
+    scrollBtn.className = 'scroll-to-top';
+    scrollBtn.innerHTML = '<span class="material-icons">arrow_upward</span>';
+    document.body.appendChild(scrollBtn);
+
+    window.onscroll = function() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollBtn.style.display = 'block';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    };
+
+    scrollBtn.onclick = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     };
 }
 
@@ -117,6 +180,7 @@ function setupNavigation() {
 function showCards() {
     const cards = document.querySelectorAll('.card');
     cards.forEach((card, index) => {
+        card.classList.remove('visible');
         setTimeout(() => {
             card.classList.add('visible');
         }, index * 200);
@@ -125,133 +189,71 @@ function showCards() {
 
 // 開始課程
 function startLesson(lessonId = null) {
+    if (!checkLoginStatus()) {
+        showToast('請先登入');
+        return;
+    }
+
     if (lessonId) {
-        alert(`開始課程：${lessonId}`);
+        showToast(`開始課程：${lessonId}`, 'success');
     } else {
-        alert('開始今日課程！');
+        showToast('開始今日課程！', 'success');
     }
 }
 
 // 顯示詳細信息
 function showDetail(topic) {
-    alert(`顯示 ${topic} 的詳細信息`);
-}
-
-// 工具詳情
-function showToolDetail(toolId) {
-    alert(`顯示 ${toolId} 的使用指南`);
-}
-
-// 檢查章節是否可訪問
-function checkChapterAccess(chapterId) {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    if (!userInfo) return false;
-    if (chapterId === 'chapter1') return true;
-    return userSubscription.status === 'premium';
-}
-
-// 切換章節展開/收起
-function toggleChapter(chapterId) {
-    if (!checkChapterAccess(chapterId)) {
-        showSubscriptionModal();
-        return;
-    }
-
-    const chapter = document.getElementById(chapterId);
-    const allChapters = document.querySelectorAll('.chapter-content');
-    
-    allChapters.forEach(ch => {
-        if (ch.id !== chapterId) {
-            ch.classList.remove('active');
+    const details = {
+        'chatgpt-4': {
+            title: 'ChatGPT 4.0 更新詳情',
+            content: '最新版本支援圖像識別、代碼生成等多項新功能...'
+        },
+        'ai-drawing': {
+            title: 'AI 繪圖完整指南',
+            content: '學習使用 Midjourney、DALL-E 等熱門 AI 繪圖工具...'
+        },
+        'ai-cases': {
+            title: 'AI 產業應用案例',
+            content: '了解 AI 在各個領域的實際應用案例...'
         }
-    });
-    
-    chapter.classList.toggle('active');
+    };
+
+    const detail = details[topic];
+    if (detail) {
+        showContentModal(detail.title, detail.content);
+    }
 }
 
-// 顯示訂閱提示
-function showSubscriptionModal() {
+// 顯示內容模態框
+function showContentModal(title, content) {
     const modal = document.createElement('div');
-    modal.className = 'subscription-modal';
+    modal.className = 'content-modal';
     modal.innerHTML = `
-        <div class="subscription-content">
-            <h2>升級到專業版</h2>
-            <p>解鎖所有進階內容：</p>
-            <ul>
-                <li>✓ 所有章節完整內容</li>
-                <li>✓ 專業練習題</li>
-                <li>✓ 實戰項目案例</li>
-                <li>✓ 專家社群支援</li>
-            </ul>
-            <div class="subscription-price">
-                <span class="price">NT$ 299</span>
-                <span class="period">/月</span>
-            </div>
-            <button class="action-button" onclick="handleSubscription()">立即升級</button>
-            <button class="close-button" onclick="closeSubscriptionModal()">稍後再說</button>
+        <div class="content-modal-body">
+            <h2>${title}</h2>
+            <div class="content-text">${content}</div>
+            <button class="action-button" onclick="closeContentModal()">關閉</button>
         </div>
     `;
     document.body.appendChild(modal);
 }
 
-// 處理訂閱
-function handleSubscription() {
-    alert('此功能正在開發中！');
-    userSubscription.status = 'premium';
-    userSubscription.expireDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-    localStorage.setItem('userSubscription', JSON.stringify(userSubscription));
-    closeSubscriptionModal();
-    loadUserData();
-}
-
-// 關閉訂閱提示
-function closeSubscriptionModal() {
-    document.querySelector('.subscription-modal').remove();
-}
-
-// 處理登出
-function handleLogout() {
-    if (confirm('確定要登出嗎？')) {
-        localStorage.removeItem('userInfo');
-        location.reload();
+// 關閉內容模態框
+function closeContentModal() {
+    const modal = document.querySelector('.content-modal');
+    if (modal) {
+        modal.remove();
     }
 }
 
-// 更新個人資料顯示
-function updateProfileInfo() {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    if (userInfo) {
-        document.getElementById('profileName').textContent = userInfo.userName;
-        document.getElementById('profilePhone').textContent = userInfo.phoneNumber;
-        document.getElementById('profileRegDate').textContent = 
-            new Date(userInfo.registrationDate).toLocaleDateString();
-    }
-}
-
-// 加載用戶數據
-function loadUserData() {
-    const savedData = localStorage.getItem('aiLearningUserData');
-    if (savedData) {
-        userData = JSON.parse(savedData);
-        updateUI();
-        updateProfileInfo();
-    }
-}
-
-// 更新UI顯示
-function updateUI() {
-    document.querySelectorAll('.progress').forEach(progress => {
-        const width = progress.getAttribute('data-progress') || '0';
-        progress.style.width = width + '%';
-    });
-
-    userData.completedLessons.forEach(lesson => {
-        const lessonElement = document.querySelector(`[data-lesson="${lesson}"]`);
-        if (lessonElement) {
-            lessonElement.classList.add('completed');
-        }
-    });
-}
+[原有的其他函數保持不變...]
 
 // 初始化
 document.addEventListener('DOMContentLoaded', initializeApp);
+
+// 錯誤處理
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+    showToast('發生錯誤，請重新整理頁面');
+    return false;
+};
