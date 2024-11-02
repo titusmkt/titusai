@@ -1,3 +1,11 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
 :root {
     --primary-color: #6C63FF;
     --secondary-color: #4CAF50;
@@ -30,6 +38,13 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+}
+
+.loader.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .loader-spinner {
@@ -77,10 +92,17 @@ body {
 
 .page {
     display: none;
+    min-height: calc(100vh - 150px);
+    padding-bottom: 70px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .page.active {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .card {
@@ -109,10 +131,30 @@ body {
     margin: 10px 0;
     cursor: pointer;
     transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
 }
 
 .action-button:active {
     transform: scale(0.98);
+}
+
+.action-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.action-button:active::after {
+    width: 200px;
+    height: 200px;
 }
 
 .progress-bar {
@@ -131,11 +173,16 @@ body {
 }
 
 .tool-card {
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px 0;
-    background: #f8f9fa;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
 }
 
 .knowledge-card {
@@ -144,11 +191,19 @@ body {
     padding: 15px;
     margin: 10px 0;
     border-radius: 5px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.knowledge-card:hover {
+    transform: translateY(-5px);
 }
 
 .bottom-nav {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     background: white;
     display: flex;
@@ -300,6 +355,7 @@ body {
     max-width: 400px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.5s ease-out;
 }
 
 .login-form {
@@ -326,21 +382,6 @@ body {
     font-size: 14px;
 }
 
-/* 添加動畫效果 */
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.login-container {
-    animation: slideUp 0.5s ease-out;
-}
 /* 個人頁面樣式 */
 .profile-header {
     text-align: center;
@@ -360,6 +401,7 @@ body {
     margin: 10px 0;
     color: #666;
 }
+
 /* 精選內容網格 */
 .featured-grid {
     display: grid;
@@ -383,15 +425,6 @@ body {
 
 .tag-hot {
     background-color: #FF5722;
-}
-
-.knowledge-card {
-    position: relative;
-    transition: transform 0.3s ease;
-}
-
-.knowledge-card:hover {
-    transform: translateY(-5px);
 }
 
 .card-meta {
@@ -418,34 +451,6 @@ body {
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.tool-card {
-    text-align: center;
-    padding: 20px;
-    border-radius: 15px;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.tool-card:hover {
-    transform: translateY(-5px);
-}
-
-.tool-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tool-icon .material-icons {
-    color: white;
-    font-size: 30px;
 }
 
 .tool-features {
@@ -479,7 +484,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 10000;
+    padding: 20px;
 }
 
 .subscription-content {
@@ -522,4 +528,74 @@ body {
     color: #666;
     margin-top: 10px;
     cursor: pointer;
+}
+
+/* 動畫 */
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 滾動條樣式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 10px;
+        padding-bottom: 80px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .app-header {
+        padding: 15px 10px;
+    }
+
+    .app-title {
+        font-size: 1.5rem;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bottom-nav {
+        padding: 8px 0;
+    }
+
+    .nav-item {
+        font-size: 0.7rem;
+    }
+
+    .nav-item .material-icons {
+        font-size: 1.3rem;
+    }
 }
