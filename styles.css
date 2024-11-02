@@ -1,11 +1,3 @@
-html, body {
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-}
-
 :root {
     --primary-color: #6C63FF;
     --secondary-color: #4CAF50;
@@ -19,48 +11,17 @@ html, body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Microsoft JhengHei', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-}
-
-.loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+html, body {
     height: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 1;
-    transition: opacity 0.3s ease-out;
+    width: 100%;
+    overflow-x: hidden;
+    background-color: var(--background-color);
 }
 
-.loader.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.loader-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #6C63FF;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
+/* 狀態欄樣式優化 */
 .status-bar {
     background-color: var(--primary-color);
     color: white;
@@ -69,20 +30,27 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 0.9rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
+/* 應用標題區域優化 */
 .app-header {
     background: linear-gradient(135deg, var(--primary-color), #8B7FFF);
     color: white;
-    padding: 20px;
+    padding: 20px 15px;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .app-title {
     font-size: 1.8rem;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
+/* 主內容區域優化 */
 .main-content {
     padding: 15px;
     max-width: 800px;
@@ -90,21 +58,7 @@ body {
     padding-bottom: 70px;
 }
 
-.page {
-    display: none;
-    min-height: calc(100vh - 150px);
-    padding-bottom: 70px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.page.active {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
+/* 卡片樣式優化 */
 .card {
     background: white;
     border-radius: 15px;
@@ -113,7 +67,7 @@ body {
     box-shadow: var(--card-shadow);
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition: all 0.3s ease;
 }
 
 .card.visible {
@@ -121,62 +75,39 @@ body {
     transform: translateY(0);
 }
 
-.action-button {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    font-size: 1rem;
-    margin: 10px 0;
-    cursor: pointer;
-    transition: transform 0.2s;
+/* 精選內容網格優化 */
+.featured-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.knowledge-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
     position: relative;
-    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
-.action-button:active {
-    transform: scale(0.98);
+.knowledge-card:hover {
+    transform: translateY(-5px);
 }
 
-.action-button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s;
-}
-
-.action-button:active::after {
-    width: 200px;
-    height: 200px;
-}
-
-.progress-bar {
-    background-color: #eee;
-    border-radius: 10px;
-    height: 10px;
-    margin: 10px 0;
-}
-
-.progress {
-    background-color: var(--secondary-color);
-    height: 100%;
-    border-radius: 10px;
-    width: 0%;
-    transition: width 0.5s ease-in-out;
+/* 工具卡片網格優化 */
+.tools-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .tool-card {
-    text-align: center;
-    padding: 20px;
-    border-radius: 15px;
     background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
 }
@@ -185,21 +116,25 @@ body {
     transform: translateY(-5px);
 }
 
-.knowledge-card {
-    background: white;
-    border-left: 4px solid var(--primary-color);
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    position: relative;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+/* 按鈕樣式優化 */
+.action-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(108, 99, 255, 0.2);
 }
 
-.knowledge-card:hover {
-    transform: translateY(-5px);
+.action-button:hover {
+    background-color: #5b54d6;
+    transform: translateY(-2px);
 }
 
+/* 底部導航優化 */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -208,7 +143,7 @@ body {
     background: white;
     display: flex;
     justify-content: space-around;
-    padding: 10px;
+    padding: 10px 0;
     box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     z-index: 1000;
 }
@@ -216,9 +151,8 @@ body {
 .nav-item {
     text-align: center;
     color: #666;
-    text-decoration: none;
     font-size: 0.8rem;
-    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .nav-item.active {
@@ -227,188 +161,26 @@ body {
 
 .nav-item .material-icons {
     font-size: 1.5rem;
+    margin-bottom: 2px;
 }
 
-/* 學習頁面特定樣式 */
-.course-chapter {
-    margin-bottom: 15px;
-    border: 1px solid #eee;
+/* 進度條優化 */
+.progress-bar {
+    background-color: #eee;
     border-radius: 10px;
+    height: 10px;
+    margin: 10px 0;
     overflow: hidden;
 }
 
-.chapter-header {
-    padding: 15px;
-    background-color: #f8f9fa;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.chapter-header:hover {
-    background-color: #e9ecef;
-}
-
-.chapter-content {
-    display: none;
-    padding: 10px;
-}
-
-.chapter-content.active {
-    display: block;
-}
-
-.lesson-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.lesson-item:hover {
-    background-color: #f8f9fa;
-}
-
-.lesson-item .material-icons {
-    margin-right: 10px;
-}
-
-.lesson-item.completed .material-icons {
-    color: var(--secondary-color);
-}
-
-.lesson-item.current .material-icons {
-    color: var(--primary-color);
-}
-
-.lesson-item.locked .material-icons {
-    color: #999;
-}
-
-.recommended-course {
-    display: flex;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #f8f9fa;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.recommended-course:hover {
-    transform: translateX(5px);
-}
-
-.course-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-}
-
-.course-image .material-icons {
-    font-size: 40px;
-    color: white;
-}
-
-.course-info {
-    flex: 1;
-}
-
-.tags {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-}
-
-.tag {
-    background-color: #e9ecef;
-    padding: 3px 8px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-}
-
-/* 登入頁面樣式 */
-.login-page {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+.progress {
+    background: linear-gradient(90deg, var(--primary-color), #8B7FFF);
     height: 100%;
-    background: linear-gradient(135deg, var(--primary-color), #8B7FFF);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
 }
 
-.login-container {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    animation: slideUp 0.5s ease-out;
-}
-
-.login-form {
-    margin-top: 30px;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    font-size: 16px;
-    outline: none;
-}
-
-.login-form input:focus {
-    border-color: var(--primary-color);
-}
-
-.login-hint {
-    margin-top: 15px;
-    color: #666;
-    font-size: 14px;
-}
-
-/* 個人頁面樣式 */
-.profile-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.profile-avatar {
-    font-size: 80px !important;
-    color: var(--primary-color);
-}
-
-.profile-info {
-    margin: 20px 0;
-}
-
-.profile-info p {
-    margin: 10px 0;
-    color: #666;
-}
-
-/* 精選內容網格 */
-.featured-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
+/* 標籤樣式優化 */
 .tag-new, .tag-hot {
     position: absolute;
     top: 10px;
@@ -420,157 +192,15 @@ body {
 }
 
 .tag-new {
-    background-color: #4CAF50;
+    background-color: var(--secondary-color);
 }
 
 .tag-hot {
     background-color: #FF5722;
 }
 
-.card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-}
-
-.card-meta span {
-    display: flex;
-    align-items: center;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.card-meta .material-icons {
-    font-size: 1.1rem;
-    margin-right: 5px;
-}
-
-/* 工具卡片網格 */
-.tools-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.tool-features {
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.feature {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.feature .material-icons {
-    color: var(--secondary-color);
-    font-size: 1rem;
-}
-
-.subscription-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    padding: 20px;
-}
-
-.subscription-content {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.subscription-content ul {
-    text-align: left;
-    margin: 20px 0;
-    padding-left: 20px;
-}
-
-.subscription-content li {
-    margin: 10px 0;
-    color: #666;
-}
-
-.subscription-price {
-    margin: 20px 0;
-}
-
-.price {
-    font-size: 2rem;
-    color: var(--primary-color);
-    font-weight: bold;
-}
-
-.period {
-    color: #666;
-}
-
-.close-button {
-    background: none;
-    border: none;
-    color: #666;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-/* 動畫 */
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* 滾動條樣式 */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* 響應式設計 */
+/* 移動端優化 */
 @media (max-width: 768px) {
-    .main-content {
-        padding: 10px;
-        padding-bottom: 80px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-
     .app-header {
         padding: 15px 10px;
     }
@@ -579,12 +209,18 @@ body {
         font-size: 1.5rem;
     }
 
-    .featured-grid {
-        grid-template-columns: 1fr;
+    .main-content {
+        padding: 10px;
     }
 
-    .tools-grid {
+    .card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .featured-grid, .tools-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .bottom-nav {
