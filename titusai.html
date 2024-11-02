@@ -1,94 +1,68 @@
-<!-- 首頁 -->
-<div class="page active" id="homePage">
-    <div class="main-content">
-        <!-- 每日任務 -->
-        <div class="card" id="dailyTask">
-            <h2>每日任務</h2>
-            <div class="progress-bar">
-                <div class="progress" style="width: 60%"></div>
-            </div>
-            <p>今日進度：3/5 完成</p>
-            <button class="action-button" onclick="startLesson()">繼續學習</button>
-        </div>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI學習助手</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 載入動畫 -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
 
-        <!-- 精選內容 -->
-        <div class="card" id="featuredContent">
-            <h2>精選內容</h2>
-            <div class="featured-grid">
-                <div class="knowledge-card">
-                    <span class="tag-new">最新</span>
-                    <h3>ChatGPT 4.0 重大更新</h3>
-                    <p>最新版本支援更多多模態功能，包括圖像分析與生成...</p>
-                    <div class="card-meta">
-                        <span><i class="material-icons">visibility</i> 2.5k</span>
-                        <button class="action-button" onclick="showDetail('chatgpt-4')">了解更多</button>
-                    </div>
-                </div>
-
-                <div class="knowledge-card">
-                    <span class="tag-hot">熱門</span>
-                    <h3>AI 繪圖完整指南</h3>
-                    <p>從零開始學習 Midjourney、DALL-E 和 Stable Diffusion...</p>
-                    <div class="card-meta">
-                        <span><i class="material-icons">visibility</i> 3.8k</span>
-                        <button class="action-button" onclick="showDetail('ai-drawing')">了解更多</button>
-                    </div>
-                </div>
-
-                <div class="knowledge-card">
-                    <h3>AI 產業應用實例</h3>
-                    <p>探索AI在金融、醫療、教育等領域的實際應用案例...</p>
-                    <div class="card-meta">
-                        <span><i class="material-icons">visibility</i> 1.9k</span>
-                        <button class="action-button" onclick="showDetail('ai-cases')">了解更多</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 熱門工具 -->
-        <div class="card" id="popularTools">
-            <h2>熱門工具</h2>
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon" style="background: linear-gradient(45deg, #74ebd5, #9face6)">
-                        <span class="material-icons">chat</span>
-                    </div>
-                    <h3>ChatGPT</h3>
-                    <p>OpenAI開發的對話型AI助手</p>
-                    <div class="tool-features">
-                        <span class="feature"><i class="material-icons">check_circle</i> 支援中文</span>
-                        <span class="feature"><i class="material-icons">check_circle</i> 免費版本</span>
-                    </div>
-                    <button class="action-button" onclick="showToolDetail('chatgpt')">使用指南</button>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-icon" style="background: linear-gradient(45deg, #ff9a9e, #fad0c4)">
-                        <span class="material-icons">brush</span>
-                    </div>
-                    <h3>Midjourney</h3>
-                    <p>專業的AI藝術創作工具</p>
-                    <div class="tool-features">
-                        <span class="feature"><i class="material-icons">check_circle</i> 高質量出圖</span>
-                        <span class="feature"><i class="material-icons">check_circle</i> Discord整合</span>
-                    </div>
-                    <button class="action-button" onclick="showToolDetail('midjourney')">使用指南</button>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-icon" style="background: linear-gradient(45deg, #a8edea, #fed6e3)">
-                        <span class="material-icons">code</span>
-                    </div>
-                    <h3>GitHub Copilot</h3>
-                    <p>AI程式碼助手</p>
-                    <div class="tool-features">
-                        <span class="feature"><i class="material-icons">check_circle</i> 多語言支援</span>
-                        <span class="feature"><i class="material-icons">check_circle</i> IDE整合</span>
-                    </div>
-                    <button class="action-button" onclick="showToolDetail('github-copilot')">使用指南</button>
-                </div>
+    <!-- 登入頁面 -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <h1>歡迎使用 AI學習助手</h1>
+            <div class="login-form">
+                <input type="text" id="phoneNumber" placeholder="請輸入手機號碼" maxlength="8">
+                <input type="text" id="userName" placeholder="請輸入您的名字">
+                <button class="action-button" onclick="handleLogin()">開始學習</button>
+                <p class="login-hint">首次使用將自動註冊</p>
             </div>
         </div>
     </div>
-</div>
+
+    <div id="app" style="display: none;">
+        <div class="status-bar">
+            <span>5G</span>
+            <span id="clock">12:00</span>
+            <span>100%</span>
+        </div>
+
+        <header class="app-header">
+            <h1 class="app-title">AI學習助手</h1>
+            <p>探索AI的奧秘，成為AI時代的領航者</p>
+        </header>
+
+        <!-- 您分享的首頁代碼放這裡 -->
+
+        <!-- 底部導航 -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-page="homePage">
+                <span class="material-icons">home</span>
+                <div>首頁</div>
+            </div>
+            <div class="nav-item" data-page="learningPage">
+                <span class="material-icons">school</span>
+                <div>學習</div>
+            </div>
+            <div class="nav-item" data-page="achievementsPage">
+                <span class="material-icons">emoji_events</span>
+                <div>成就</div>
+            </div>
+            <div class="nav-item" data-page="profilePage">
+                <span class="material-icons">person</span>
+                <div>我的</div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
