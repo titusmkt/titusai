@@ -78,7 +78,6 @@ function showToast(message, type = 'error') {
     toast.textContent = message;
     document.body.appendChild(toast);
 
-    // 動畫效果
     setTimeout(() => toast.classList.add('show'), 100);
     setTimeout(() => {
         toast.classList.remove('show');
@@ -93,17 +92,25 @@ function initializeApp() {
     setupNavigation();
     loadSubscriptionStatus();
 
-    window.onload = function() {
-        document.getElementById('loader').style.display = 'none';
-        if (!checkLoginStatus()) {
-            document.getElementById('app').style.display = 'none';
-        } else {
-            document.getElementById('app').style.display = 'block';
-            showCards();
-        }
-    };
+    // 檢查登入狀態並顯示適當頁面
+    if (!checkLoginStatus()) {
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('loginPage').style.display = 'flex';
+    } else {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        showCards();
+    }
 
-    // 添加返回頂部按鈕
+    // 隱藏載入動畫
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 300);
+    }, 500);
+
     setupScrollToTop();
 }
 
@@ -112,47 +119,12 @@ function loadSubscriptionStatus() {
     const savedSubscription = localStorage.getItem('userSubscription');
     if (savedSubscription) {
         userSubscription = JSON.parse(savedSubscription);
-        
-        // 檢查訂閱是否過期
         if (userSubscription.expireDate && new Date(userSubscription.expireDate) < new Date()) {
             userSubscription.status = 'free';
             userSubscription.expireDate = null;
             localStorage.setItem('userSubscription', JSON.stringify(userSubscription));
         }
     }
-}
-
-// 返回頂部功能
-function setupScrollToTop() {
-    const scrollBtn = document.createElement('button');
-    scrollBtn.className = 'scroll-to-top';
-    scrollBtn.innerHTML = '<span class="material-icons">arrow_upward</span>';
-    document.body.appendChild(scrollBtn);
-
-    window.onscroll = function() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            scrollBtn.style.display = 'block';
-        } else {
-            scrollBtn.style.display = 'none';
-        }
-    };
-
-    scrollBtn.onclick = function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    };
-}
-
-// 更新時鐘顯示
-function updateClock() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('zh-TW', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-    document.getElementById('clock').textContent = timeString;
 }
 
 // 設置導航功能
@@ -169,9 +141,12 @@ function setupNavigation() {
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            document.getElementById(targetPage).classList.add('active');
             
-            showCards();
+            const targetElement = document.getElementById(targetPage);
+            if (targetElement) {
+                targetElement.classList.add('active');
+                showCards();
+            }
         });
     });
 }
@@ -183,77 +158,79 @@ function showCards() {
         card.classList.remove('visible');
         setTimeout(() => {
             card.classList.add('visible');
-        }, index * 200);
+        }, index * 100);
     });
 }
 
-// 開始課程
-function startLesson(lessonId = null) {
-    if (!checkLoginStatus()) {
-        showToast('請先登入');
-        return;
-    }
-
-    if (lessonId) {
-        showToast(`開始課程：${lessonId}`, 'success');
-    } else {
-        showToast('開始今日課程！', 'success');
+// 更新時鐘顯示
+function updateClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('zh-TW', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    const clockElement = document.getElementById('clock');
+    if (clockElement) {
+        clockElement.textContent = timeString;
     }
 }
 
-// 顯示詳細信息
-function showDetail(topic) {
-    const details = {
-        'chatgpt-4': {
-            title: 'ChatGPT 4.0 更新詳情',
-            content: '最新版本支援圖像識別、代碼生成等多項新功能...'
+// 處理工具詳情
+function showToolDetail(toolId) {
+    const toolDetails = {
+        'chatgpt': {
+            title: 'ChatGPT 使用指南',
+            content: '了解如何有效使用 ChatGPT 提升工作效率...'
         },
-        'ai-drawing': {
-            title: 'AI 繪圖完整指南',
-            content: '學習使用 Midjourney、DALL-E 等熱門 AI 繪圖工具...'
+        'midjourney': {
+            title: 'Midjourney 創作指南',
+            content: '掌握 Midjourney 的進階提示詞技巧...'
         },
-        'ai-cases': {
-            title: 'AI 產業應用案例',
-            content: '了解 AI 在各個領域的實際應用案例...'
+        'github-copilot': {
+            title: 'GitHub Copilot 開發指南',
+            content: '使用 AI 加速你的程式開發流程...'
         }
     };
 
-    const detail = details[topic];
+    const detail = toolDetails[toolId];
     if (detail) {
         showContentModal(detail.title, detail.content);
     }
 }
 
-// 顯示內容模態框
-function showContentModal(title, content) {
-    const modal = document.createElement('div');
-    modal.className = 'content-modal';
-    modal.innerHTML = `
-        <div class="content-modal-body">
-            <h2>${title}</h2>
-            <div class="content-text">${content}</div>
-            <button class="action-button" onclick="closeContentModal()">關閉</button>
-        </div>
-    `;
-    document.body.appendChild(modal);
-}
+// 更新個人資料顯示
+function updateProfileInfo() {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo) {
+        const elements = {
+            'profileName': userInfo.userName,
+            'profilePhone': userInfo.phoneNumber,
+            'profileRegDate': new Date(userInfo.registrationDate).toLocaleDateString()
+        };
 
-// 關閉內容模態框
-function closeContentModal() {
-    const modal = document.querySelector('.content-modal');
-    if (modal) {
-        modal.remove();
+        Object.entries(elements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        });
     }
 }
 
-[原有的其他函數保持不變...]
+// 處理登出
+function handleLogout() {
+    if (confirm('確定要登出嗎？')) {
+        localStorage.removeItem('userInfo');
+        location.reload();
+    }
+}
 
-// 初始化
+// 初始化應用
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 // 錯誤處理
 window.onerror = function(msg, url, lineNo, columnNo, error) {
-    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+    console.error('Error:', msg, '\nURL:', url, '\nLine:', lineNo, '\nColumn:', columnNo, '\nError object:', error);
     showToast('發生錯誤，請重新整理頁面');
     return false;
 };
