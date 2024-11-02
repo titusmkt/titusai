@@ -1,7 +1,7 @@
 <!-- 首頁 -->
 <div class="page active" id="homePage">
     <div class="main-content">
-        <!-- 每日任務卡片 -->
+        <!-- 每日任務 -->
         <div class="card" id="dailyTask">
             <h2>每日任務</h2>
             <div class="progress-bar">
@@ -11,7 +11,7 @@
             <button class="action-button" onclick="startLesson()">繼續學習</button>
         </div>
 
-        <!-- 精選內容卡片 -->
+        <!-- 精選內容 -->
         <div class="card" id="featuredContent">
             <h2>精選內容</h2>
             <div class="featured-grid">
@@ -46,11 +46,48 @@
             </div>
         </div>
 
-        <!-- 熱門工具卡片 -->
+        <!-- 熱門工具 -->
         <div class="card" id="popularTools">
             <h2>熱門工具</h2>
             <div class="tools-grid">
-                <!-- 您現有的工具卡片內容保持不變 -->
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(45deg, #74ebd5, #9face6)">
+                        <span class="material-icons">chat</span>
+                    </div>
+                    <h3>ChatGPT</h3>
+                    <p>OpenAI開發的對話型AI助手</p>
+                    <div class="tool-features">
+                        <span class="feature"><i class="material-icons">check_circle</i> 支援中文</span>
+                        <span class="feature"><i class="material-icons">check_circle</i> 免費版本</span>
+                    </div>
+                    <button class="action-button" onclick="showToolDetail('chatgpt')">使用指南</button>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(45deg, #ff9a9e, #fad0c4)">
+                        <span class="material-icons">brush</span>
+                    </div>
+                    <h3>Midjourney</h3>
+                    <p>專業的AI藝術創作工具</p>
+                    <div class="tool-features">
+                        <span class="feature"><i class="material-icons">check_circle</i> 高質量出圖</span>
+                        <span class="feature"><i class="material-icons">check_circle</i> Discord整合</span>
+                    </div>
+                    <button class="action-button" onclick="showToolDetail('midjourney')">使用指南</button>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(45deg, #a8edea, #fed6e3)">
+                        <span class="material-icons">code</span>
+                    </div>
+                    <h3>GitHub Copilot</h3>
+                    <p>AI程式碼助手</p>
+                    <div class="tool-features">
+                        <span class="feature"><i class="material-icons">check_circle</i> 多語言支援</span>
+                        <span class="feature"><i class="material-icons">check_circle</i> IDE整合</span>
+                    </div>
+                    <button class="action-button" onclick="showToolDetail('github-copilot')">使用指南</button>
+                </div>
             </div>
         </div>
     </div>
