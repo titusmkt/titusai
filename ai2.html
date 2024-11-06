@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成式AI學習平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .navbar {
+            background-color: #2c3e50;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .main-content {
+            margin-top: 70px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .game-container {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="#intro">基礎概念</a>
+            <a href="#game">互動學習</a>
+            <a href="#tools">AI工具</a>
+            <a href="#quiz">測驗區</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <section id="intro" class="section">
+            <h2>生成式AI基礎概念</h2>
+            <p>生成式AI是一種能夠創造新內容的人工智能技術，例如文字、圖像、音樂等。</p>
+        </section>
+
+        <section id="game" class="section">
+            <h2>互動學習區</h2>
+            <div class="game-container">
+                <h3>AI概念配對遊戲</h3>
+                <p>即將推出：趣味互動遊戲，幫助您更好地理解AI概念！</p>
+            </div>
+        </section>
+
+        <section id="tools" class="section">
+            <h2>推薦AI工具</h2>
+            <ul>
+                <li>ChatGPT - OpenAI的大型語言模型</li>
+                <li>Midjourney - AI圖像生成工具</li>
+                <li>DALL-E - AI藝術創作平台</li>
+            </ul>
+        </section>
+
+        <section id="quiz" class="section">
+            <h2>測驗區</h2>
+            <p>準備好測試您的AI知識了嗎？</p>
+        </section>
+    </div>
+</body>
+</html>
