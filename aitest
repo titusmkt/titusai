@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瘦身产品网站</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        header {
+            background-color: #111;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #222;
+        }
+        nav a {
+            color: #fff;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        .hero {
+            background-color: #000;
+            padding: 50px 0;
+            text-align: center;
+        }
+        .hero img {
+            max-width: 100%;
+            height: auto;
+        }
+        .content {
+            padding: 20px;
+        }
+        footer {
+            background-color: #111;
+            text-align: center;
+            padding: 10px 0;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>瘦身产品品牌</h1>
+</header>
+
+<nav>
+    <a href="#">会员计划</a>
+    <a href="#">网店</a>
+    <a href="#">健康资讯与见证</a>
+    <a href="#">减脂测试</a>
+    <a href="#">殊荣及活动</a>
+    <a href="#">检测报告</a>
+    <a href="#">销售渠道</a>
+</nav>
+
+<div class="hero">
+    <img src="path_to_your_image.jpg" alt="瘦身产品">
+</div>
+
+<div class="content">
+    <h2>品牌愿景</h2>
+    <p>推广健康瘦身文化，成为华人首选的瘦身保健品。</p>
+    <!-- 其他内容 -->
+</div>
+
+<footer>
+    <p>联系我们: 852 6296 8577 | www.yourwebsite.com</p>
+</footer>
+
+</body>
+</html>
